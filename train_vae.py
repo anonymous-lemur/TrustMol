@@ -6,10 +6,10 @@ import numpy as np
 
 import torch
 
-from .datasets import QM9
-from .models import SGP_VAE
-from .egnn_models import get_adj_matrix
-from .utils import Queue, gradient_clipping
+from datasets import QM9
+from models import SGP_VAE
+from egnn_models import get_adj_matrix
+from utils import Queue, gradient_clipping
 
 
 
@@ -33,7 +33,7 @@ def main():
     logger.setLevel(logging.INFO)
     logger.addHandler(logging.FileHandler('{}/exp.log'.format(exp_dir)))
 
-    qm9_npz_path = '{}/qm9_dataset.npz'.format(exp_dir)
+    qm9_npz_path = './qm9_dataset.npz'
     npz_file = np.load(qm9_npz_path, allow_pickle = True)
     selfies = npz_file['selfies']
     homos = npz_file['homo'] * 27.2114
@@ -50,7 +50,7 @@ def main():
 
 
     dataset = QM9(dataset_npz_path)
-    dataloader = torch.utils.data.DataLoder(
+    dataloader = torch.utils.data.DataLoader(
         dataset,
         batch_size = 32,
         shuffle = True,
@@ -88,7 +88,7 @@ def main():
 
             pred_prop = vae_model.decode_property(latent)
             if pred_prop.shape[-1] == 1:
-                loss, loss_dic = vae_model.compute_loss(selfies_rec, selfies_gt, mu, latent, data_dic[args.prop].cuda(), pred_prop, x_rec, x, h_rec, h, node_mask)
+                loss, loss_dic = vae_model.compute_loss(selfies_rec, selfies_gt, mu, latent, data_dic[args.property].cuda(), pred_prop, x_rec, x, h_rec, h, node_mask)
             else:
                 gt_props = torch.stack((data_dic['homo'].cuda(), data_dic['lumo'].cuda(), data_dic['dipole_moment'].cuda()), dim = -1)
                 loss, loss_dic = vae_model.compute_loss(selfies_rec, selfies_gt, mu, latent, gt_props, pred_prop, x_rec, x, h_rec, h, node_mask)
