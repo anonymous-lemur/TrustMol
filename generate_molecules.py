@@ -5,8 +5,8 @@ import os
 import numpy as np
 from glob import glob
 
-from .datasets import QM9
-from .models import SGP_VAE, LatentToProperty
+from datasets import QM9
+from models import SGP_VAE, LatentToProperty
 
 def parse_config():
     parser = argparse.ArgumentParser(description='arg parser')
@@ -42,7 +42,8 @@ def main():
 
     ensemble_surrogate_model = []
     for path in glob('{}/surrogate*.pt'.format(exp_dir)):
-        _, surrogate_idx, act_fn = path.split('/')[-1].split('-')        
+        _, surrogate_idx, act_fn = path.split('/')[-1].split('-')    
+        act_fn = act_fn.split('.')[0]    
         surrogate_model = LatentToProperty(act_fn = act_fn, num_targets=num_targets).cuda()
         surrogate_model.load_state_dict(torch.load(path))
         surrogate_model.eval()
@@ -51,13 +52,13 @@ def main():
         ensemble_surrogate_model.append(surrogate_model)
 
 
-    if args.prop == 'homo':
+    if args.property == 'homo':
         targets = torch.linspace(start = -10., end = 0., steps = args.num_samples).cuda()
-    elif args.prop == 'lumo':
+    elif args.property == 'lumo':
         targets = torch.linspace(start = -4., end = 2., steps = args.num_samples).cuda()
-    elif args.prop == 'dipole_moment':
+    elif args.property == 'dipole_moment':
         targets = torch.linspace(start = 0, end = 4., steps = args.num_samples).cuda()
-    elif args.prop == 'multi':
+    elif args.property == 'multi':
         targets_homo = torch.linspace(start = -8., end = -3., steps = 10).cuda()
         targets_lumo = torch.linspace(start = -3., end = 2., steps = 10).cuda()
         targets_dipole_moment = torch.linspace(start = 0., end = 4., steps = 10).cuda()
