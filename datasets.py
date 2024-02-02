@@ -73,31 +73,35 @@ class QM9(torch.utils.data.Dataset):
         else:
             self.latents = np.array(self.latents)
         
-        
-        self.positions = np.array(self.npz_file['positions'])
-        self.charges = np.array(self.npz_file['charges'])
-
+        try:
+            self.positions = np.array(self.npz_file['positions'])
+            self.charges = np.array(self.npz_file['charges'])
+        except:
+            self.positions = None
+            self.charges = None
     def __len__(self):
         return len(self.selfies_tokens)
 
     def __getitem__(self, idx):
-        positions = torch.from_numpy(self.positions[idx])
-        charges = self.charges[idx]
-
-        node_mask = charges > 0
-
-        one_hots = torch.nn.functional.one_hot(torch.from_numpy(np.array([self.charges_to_idx[c.item()] for c in charges])), num_classes = 5)
-
-        node_mask = torch.from_numpy(node_mask).long()
         data_dic = {
                 'selfies_tokens': torch.from_numpy(self.selfies_tokens[idx]).long(),
                 'homo': torch.tensor(self.homos[idx]).float(),   
                 'lumo': torch.tensor(self.lumos[idx]).float(),
                 'dipole_moment': torch.tensor(self.dipole_moments[idx]).float(),
-                'positions': positions,
-                'node_mask': node_mask,
-                'one_hots': one_hots
             }
+        
+        if self.positions is not None:
+            positions = torch.from_numpy(self.positions[idx])
+            charges = self.charges[idx]
+            node_mask = charges > 0
+            one_hots = torch.nn.functional.one_hot(torch.from_numpy(np.array([self.charges_to_idx[c.item()] for c in charges])), num_classes = 5)
+            node_mask = torch.from_numpy(node_mask).long()
+
+
+            data_dic['positions'] = positions,
+            data_dic['node_mask'] = node_mask,
+            data_dic['one_hots'] = one_hots
+
 
 
         if self.latents is not None:
