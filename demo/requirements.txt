@@ -1,0 +1,5 @@
+streamlit
+pyvista
+stpyvista
+numpy
+selfies
