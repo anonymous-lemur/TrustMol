@@ -109,11 +109,16 @@ def main():
     parser.add_argument('--slurm_id', type=int, default=1,
                         help='Specify model path')
     parser.add_argument('--num_processes', type = int, default=1)
+    parser.add_argument('--exp_name', type = str, default = None)
+    parser.add_argument('--property', type = str, default='homo')
     parser.add_argument('--npz_file_path', type = str, default='acquired_latents.npz')
     args = parser.parse_args()
-    npz_file = np.load(args.npz_file_path, allow_pickle = True)
+    
+    npz_file_path = './outputs/{}/{}/acquired_latents.npz'.format(args.exp_name, args.property)
+    npz_file = np.load(npz_file_path, allow_pickle = True)
+    os.makedirs('./temp_dat', exist_ok=True)
 
-    calculate_properties(args.slurm_id, args.num_processes, npz_file, args.file_path)
+    calculate_properties(args.slurm_id, args.num_processes, npz_file, npz_file_path)
 
 
 if __name__ == '__main__':
