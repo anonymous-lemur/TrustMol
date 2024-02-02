@@ -7,8 +7,8 @@ import random
 from glob import glob
 import torch
 
-from .datasets import QM9
-from .models import LatentToProperty
+from datasets import QM9
+from models import LatentToProperty
            
     
 def parse_config():
@@ -84,7 +84,7 @@ def main():
     np.savez(dataset_npz_path, **npz_dic)
 
     dataset = QM9(dataset_npz_path)
-    dataloader = torch.utils.data.DataLoder(
+    dataloader = torch.utils.data.DataLoader(
         dataset,
         batch_size = 32,
         shuffle = True,
