@@ -6,7 +6,7 @@ TrustMol requires RDKit and Psi4 for the NFP-based evaluation.
 You can install them with Conda,
 
 ```
-conda create -n -c conda-forge rdkit psi4
+conda create -n TrustMol -c conda-forge rdkit psi4
 ```
 
 The rest of the dependencies can be installed with
