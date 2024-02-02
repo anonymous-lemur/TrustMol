@@ -1,5 +1,5 @@
 import torch
-
+import numpy as np
 class Queue():
     def __init__(self, max_len=50):
         self.items = []
