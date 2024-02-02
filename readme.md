@@ -14,6 +14,9 @@ The rest of the dependencies can be installed with
 pip install -r requirements.txt
 ```
 
+Download the preprocessed dataset to train the SGP-VAE from the following link and put it in root directory.
+https://drive.google.com/file/d/1NBU-GvJNVKqw9N5bGWnl51sxuItG0mfV/view?usp=sharing
+
 ### Training TrustMol
 First, train the SGP-VAE.
 ```
