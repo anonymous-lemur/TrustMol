@@ -1,7 +1,6 @@
 # TrustMol
 
 ### Dependencies
-#### Training and Evaluation
 TrustMol requires RDKit and Psi4 for the NFP-based evaluation.
 You can install them with Conda,
 
@@ -13,20 +12,6 @@ The rest of the dependencies can be installed with
 
 ```
 pip install -r requirements.txt
-```
-
-#### Interactive Tool
-The web-based interactive tool for TrustMol can be run locally on a Linux device.
-Make sure that the python version is at least 3.10, and install the dependencies,
-
-```
-pip install streamlit stpyvista
-```
-
-If you plan to run the interactive tool on a headless device, run the following lines to install dependencies
-
-```
-sudo apt-install libgl1-mesa-glx xvfb
 ```
 
 ### Training TrustMol
@@ -68,3 +53,23 @@ python evaluate.py --exp_name TrustMol --property dipole_moment --budget 10
 ```
 
 
+### Interactive Tool
+The web-based interactive tool for TrustMol is available at https://repo012424.streamlit.app/.
+In case of server downtime, the tool can be run locally on a Linux device.
+Make sure that the python version is at least 3.10, and install the dependencies,
+
+```
+pip install streamlit stpyvista
+```
+
+If you plan to run the interactive tool on a headless device, run the following lines to install dependencies
+
+```
+sudo apt-install libgl1-mesa-glx xvfb
+```
+
+Then, on the `demo` directory, run
+
+```
+streamlit run TrustMolGUI.py
+```
