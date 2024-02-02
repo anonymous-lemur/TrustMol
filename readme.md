@@ -25,7 +25,7 @@ python train_vae.py --exp_name TrustMol --property dipole_moment --max_epoch 50
 
 Then, perform the latent-property pairs acquisition to create a new dataset of latent-property pairs.
 ```
-python acquire_lp_pairs.py --slurm_id 1 --num_processes 1 --npz_file_path acquired_latents.npz
+python acquire_lp_pairs.py --slurm_id 1 --num_processes 1 --exp_name TrustMol --property dipole_moment
 ```
 `slurm_id` is the process id if you run the script in parallel. If you run x processes in parallel, each process will need to be assigned a `slurm_id` within the range [0, x). 
 Note that this step is cpu-intensive. In our experiments, it takes around 2 hours to complete (using 5000 parallel processes).
