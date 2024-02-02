@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import math
 
-from .egnn_models import EGNN_Encoder
+from egnn_models import EGNN_Encoder
 
 class LatentToProperty(torch.nn.Module):
     """
@@ -12,7 +12,7 @@ class LatentToProperty(torch.nn.Module):
         super().__init__()
         self.latent_dim = 256
         act_fn_dic = {'silu': nn.SiLU(), 'relu': nn.ReLU(), 'gelu': nn.GELU(), 'softplus': nn.Softplus(), 'hardswish': nn.Hardswish(), 'leaky': nn.LeakyReLU()}
-        self.act_fn = act_fn
+        self.act_fn = act_fn_dic[act_fn]
         
         self.predictor = nn.Sequential(
             nn.Linear(self.latent_dim, 512),
