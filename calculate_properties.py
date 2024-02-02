@@ -80,7 +80,6 @@ def get_properties(xyz_string, id = 0):
     except:
         homo = None
         lumo = None
-        gap = None
         dipole_moment = None
 
     psi4.core.clean()
@@ -90,13 +89,11 @@ def get_properties(xyz_string, id = 0):
         pass
     time.sleep(1)
 
-    return homo, lumo, gap, dipole_moment #, isotropic_dipole_polarizability
+    return homo, lumo, dipole_moment #, isotropic_dipole_polarizability
 
 def calculate_properties(args, slurm_id, num_processes):
     DIR_PATH = './outputs/{}/{}/generated_molecules'.format(args.exp_name, args.property)
     npz_path_list = sorted(glob(os.path.join(DIR_PATH, '*.npz')))
-    os.makedirs('./temp_dat', exist_ok=True)
-
 
     for i in range(slurm_id - 1, len(npz_path_list), num_processes):
         try:
@@ -115,7 +112,7 @@ def calculate_properties(args, slurm_id, num_processes):
                 opt_xyz = npz_file['opt_xyz']
     
         opt_xyz = str(opt_xyz)
-        homo, lumo, gap, dipole_moment = get_properties(opt_xyz, id = slurm_id)
+        homo, lumo, dipole_moment = get_properties(opt_xyz, id = slurm_id)
         npz_file['homo'] = np.array([homo])
         npz_file['lumo'] = np.array([lumo])
         npz_file['dipole_moment'] = np.array([dipole_moment])
@@ -126,6 +123,8 @@ def calculate_properties(args, slurm_id, num_processes):
 
 def main():
     args = parse_config()
+    os.makedirs('./temp_dat', exist_ok=True)
+
     calculate_properties(args, args.slurm_id, args.num_processes)
     
 if __name__ == '__main__':
